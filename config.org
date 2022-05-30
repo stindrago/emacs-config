@@ -10,31 +10,6 @@
 #+CATEGORY: private
 #+PROPERTY: header-args :tangle yes :cache yes :results silent :padline no :comments no
 
-#+html: <a href="https://www.gnu.org/software/emacs/emacs.html#Releases"><img 
-src="https://img.shields.io/badge/Emacs-27.1%20%E2%80%93%2028.0.50-blueviolet.svg?style=flat-square&logo=GNU%20Emacs&logoColor=white"></a>
-#+html: <a href="https://orgmode.org"><img 
-src="https://img.shields.io/badge/Org-literate%20config-%2377aa99?style=flat-square&logo=org&logoColor=white"></a>
-#+html: <a href="https://www.buymeacoffee.com/stindrago"><img 
-src="https://img.shields.io/badge/Buy_me_a%C2%A0coffee-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black"></a>
-
-Here you may find my config. There is only one significant file: =config.org=.
-
-[[file:resource/images/splash-screen.png]]
-
-[[file:resource/images/editor-ui-demo.png]]
-
-* Installation
-
-In order to have Doom load the config, we need to tangle =config.org= and
-generate the =*.el= files.
-
-#+begin_src shell :eval query :tangle no
-git clone https://gitlab.com/stindrago/emacs-config ~/.config/doom
-emacs --batch --eval "(progn (require 'org) (setq org-confirm-babel-evaluate nil) (org-babel-tangle-file \"~/.config/doom/config.org\"))"
-git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
-~/.emacs.d/bin/doom install; ~/.config/doom/setup.sh
-#+end_src
-
 * Init
 
 #+begin_src emacs-lisp :tangle "init.el"
