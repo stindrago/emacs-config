@@ -9,12 +9,9 @@
 #+FILETAGS: en configs emacs coding emacs-lisp
 #+CATEGORY: private
 
-#+html: <a href="https://www.gnu.org/software/emacs/emacs.html#Releases"><img
-src="https://img.shields.io/badge/Emacs-27.1%20%E2%80%93%2028.0.50-blueviolet.svg?style=flat-square&logo=GNU%20Emacs&logoColor=white"></a>
-#+html: <a href="https://orgmode.org"><img 
-src="https://img.shields.io/badge/Org-literate%20config-%2377aa99?style=flat-square&logo=org&logoColor=white"></a>
-#+html: <a href="https://www.buymeacoffee.com/stindrago"><img 
-src="https://img.shields.io/badge/Buy_me_a%C2%A0coffee-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black"></a>
+#+html: <a href="https://www.gnu.org/software/emacs/emacs.html#Releases"><img src="https://img.shields.io/badge/Emacs-27.1%20%E2%80%93%2028.0.50-blueviolet.svg?style=flat-square&logo=GNU%20Emacs&logoColor=white"></a>
+#+html: <a href="https://orgmode.org"><img src="https://img.shields.io/badge/Org-literate%20config-%2377aa99?style=flat-square&logo=org&logoColor=white"></a>
+#+html: <a href="https://www.buymeacoffee.com/stindrago"><img src="https://img.shields.io/badge/Buy_me_a%C2%A0coffee-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black"></a>
 
 Here you may find my config. There is only one significant file: =config.org=.
 
