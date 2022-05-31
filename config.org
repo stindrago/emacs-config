@@ -258,12 +258,11 @@
 ** File paths
 
 #+begin_src emacs-lisp
-(setq main-directory "~/resources/"
-      org-directory (concat main-directory "org/")
-      org-agenda-files '(org-directory)
-      org-roam-db-location (concat org-directory ".org-roam.db")
-      org-roam-directory (file-truename (concat org-directory "org/roam/"))
-      org-roam-dailies-directory "diary/")
+(setq org-directory "~/resources/org/"
+      org-agenda-files '("~/resources/org/")
+      org-roam-db-location "~/resources/org/.org-roam.db"
+      org-roam-directory (file-truename "~/resources/org/roam/")
+      org-roam-dailies-directory "diary")
 #+end_src
 
 * Os specific
@@ -552,10 +551,9 @@ Auto commit.
 
 #+begin_src emacs-lisp
 (after! org-agenda
-  (setq (or    )g-priority-highest ?A
-        org-priority-lowest ?Z
-        org-priority-default ?A)
-
+    (setq org-priority-highest ?A
+          org-priority-lowest ?Z
+          org-priority-default ?A)
   (setq org-ellipsis " ‧‧‧‧>"
         org-hide-leading-stars t
         org-priority-faces '((?A . (:foreground "#3a0088" :weight 'bold))
@@ -698,7 +696,17 @@ This function makes sure that dates are aligned for easy reading."
 
 New link type for Org-Hugo internal links.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
+(package! ox-hugo)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package! ox-hugo
+  :ensure t
+  :after ox)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
 (defun org-hugo-link-complete ()
   "Create link with Hugo ref shortcode"
   (concat "{{% ref " (file-relative-name (read-file-name "File: ")) " %}}"))
@@ -707,17 +715,6 @@ New link type for Org-Hugo internal links.
 (org-link-set-parameters "hugo"
                          :complete 'org-hugo-link-complete
                          :follow 'org-hugo-follow)
-
-#+end_src
-
-#+begin_src emacs-lisp :tangle "packages.el"
-(package! ox-hugo)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! ox-hugo
-  :ensure t
-  :after ox)
 #+end_src
 
 *** Clojure
