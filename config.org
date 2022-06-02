@@ -314,6 +314,134 @@ Functionality.
 
 * User experience
 
+** Emoji
+
+changing the configurations for emojify
+
+#+begin_src emacs-lisp :tangle no
+(use-package! emojify
+  :config
+  ;; (url-copy-file "https://github.com/hfg-gmuend/openmoji/releases/latest/download/openmoji-72x72-color.zip"
+  ;;                (concat (locate-user-emacs-file "emojis") "/openmoji-72x72-color-latest.zip"))
+  ;; Extract
+  (setq  emojify-emoji-set "openmoji-72x72-color-latest"))
+#+end_src
+
+** Splash screen
+
+#+begin_src emacs-lisp
+(setq fancy-splash-image "~/.config/doom/resource/images/profile-image.png")
+#+end_src
+
+** Dashboard items
+
+#+begin_src emacs-lisp: :tangle no
+(setq +doom-dashboard-menu-sections)
+#+end_src
+
+** Keybindings
+
+Swap keybindings to work for Dvorak keyboard.
+
+It is unconfortable to use the VIM keybindings made for /QWERTY/ with the /Dvorak/ layout.
+I also don't like that the home starts with the =h= key, I much prefer to put my index finger on the =j= key instead.
+So because the =hjkl= keys with /Dvorak/ are in a different place I rebind them to =htns= keys.
+After I change the motion keys I have to change also the keys I overwrote like =n= for next and =s= for snipe to =j= for jump and =l= for look.
+
+| Qwerty | Dvorak | Previous                | Now                |
+|--------+--------+-------------------------+--------------------|
+| h      | d      |                         |                    |
+| j      | h      | evil-next-line          | evil-backward-char |
+| k      | t      | evil-snipe-t            | evil-next-line     |
+| l      | n      | evil-ex-search-next     | evil-previous-line |
+|        | s      | evil-snipe-s            | evil-forward-char  |
+
+And lets rebind what we took away to another key.
+
+| Command                 | Previous Key | Description    | Current Key | Description   |
+|-------------------------+--------------+----------------+-------------+---------------|
+| evil-ex-search-next     | n            | next           | j           | jump next     |
+| evil-ex-search-previous | N            | previous       | J           | jump previous |
+| evil-snipe-t            | t            | snipe next     |             |               |
+| evil-snipe-T            | T            | snipe previous |             |               |
+| evil-snipe-s            | s            |                | l           | look next     |
+| evil-snipe-S            | S            |                | L           | look previous |
+
+Unbind the keys, see: [[https://github.com/doomemacs/doomemacs/blob/develop/docs/faq.org#my-new-keybinds-dont-work][My new keybinds don’t work]].
+
+#+begin_src emacs-lisp
+(map! :map evil-snipe-local-mode-map
+      :mn "s" nil
+      :mn "S" nil)
+(map! :map evil-snipe-mode-map
+      :mn "s" nil
+      :mn "S" nil)
+(map! :map evil-snipe-override-local-mode-map
+      :m "t" nil
+      :m "t" nil)
+(map! :map evil-snipe-override-mode-map
+      :m "t" nil
+      :m "T" nil)
+(map! :map code-review-mode-map
+      :nv "n" nil
+      :nv "N" nil
+      :nv "j" nil
+      :nv "k" nil)
+(map! :map magit-blame-read-only-mode-map
+      :nv "n" nil
+      :nv "N" nil
+      :nv "j" nil
+      :n "k" nil)
+(map! :map magit-mode-map
+      :nv "n" nil
+      :nv "N" nil
+      :nv "j" nil
+      :nv "k " nil)
+(map! :map ivy-occur-grep-mode-map
+      :n "h" nil
+      :n "l" nil
+      :v "j" nil
+      :v "k" nil)
+(map! :map ivy-occur-mode-map
+      :n "h" nil
+      :n "l" nil)
+(map! :map doom-leader-code-map
+      "k" nil)
+(map! :map evil-motion-state-map
+      "h" nil
+      "H" nil
+      "t" nil
+      "n" nil
+      "N" nil
+      "T" nil
+      "l" nil
+      "L" nil
+      "j" nil
+      "k" nil
+      "K" nil)
+(map! :map evil-normal-state-map
+      "h" nil
+      "s" nil
+      "S" nil
+      "J" nil
+      "K" nil)
+(map! :map evil-visual-state-map
+      "K" nil)
+#+end_src
+
+Rebind the keys.
+
+#+begin_src emacs-lisp :tangle yes
+(map! :desc "Backward character" :mnv "h" #'evil-backward-char
+      :desc "Next line"          :mnv "t" #'evil-next-line
+      :desc "Previous line"      :mnv "n" #'evil-previous-line
+      :desc "Forward character"  :mnv "s" #'evil-forward-char
+      :desc "Jump next"          :mnv "j" #'evil-ex-search-next
+      :desc "Jump previous"      :mnv "J" #'evil-ex-search-previous
+      :desc "Look next"          :mnv "l" #'evil-snipe-s
+      :desc "Look previous"      :mnv "L" #'evil-snipe-S)
+#+end_src
+
 ** Theme and font
 
 The fonts from the [[file:resource/font/][fonts directory]] are required to be installed on the machine first.
@@ -394,14 +522,14 @@ Auto commit.
 (setq org-roam-capture-templates
         `(("c" "📞 New Contact" plain (file ".new-contact.txt")
            :target (file+head "contacts/%<%Y-%m-%dT%H-%M-%S>-${slug}.org"
-                              "#+TITLE: ${title}\n#+AUTHOR: %(print custom/nickname)\n#+DATE: %<%Y-%m-%dT%H:%M:%S>\n#+FILETAGS: contact\n#+CATEGORY: private\n#+EXPORT_EXCLUDE_TAGS: noexport\n\n")
+                              "#+TITLE: ${title}\n#+AUTHOR: %(print custom/nickname)\n#+EMAIL: %(print user-mail-address)\n#+DATE: %<%Y-%m-%dT%H:%M:%S>\n#+LANGUAGE: en\n#+FILETAGS: contact\n#+CATEGORY: private\n#+EXPORT_EXCLUDE_TAGS: noexport\n\n")
            :empty-lines-before 1
            :immediate-finish t
            :jump-to-captured t
            :unnarrowed t)
-          ("k" "🌱 New Knowledge" plain "* %?"
+          ("k" "🌱 New Knowledge" plain "%?"
            :target (file+head "%<%Y-%m-%dT%H-%M-%S>-${slug}.org"
-                              "#+TITLE: ${title}\n#+AUTHOR: %(print custom/nickname)\n#+DATE: %<%Y-%m-%dT%H:%M:%S>\n#+FILETAGS: inbox\n#+CATEGORY: private\n\n")
+                              "#+TITLE: ${title}\n#+AUTHOR: %(print custom/nickname)\n#+EMAIL: %(print user-mail-address)\n#+DATE: %<%Y-%m-%dT%H:%M:%S>\n#+LANGUAGE: en\n#+FILETAGS: en inbox\n#+CATEGORY: private\n#+EXPORT_EXCLUDE_TAGS: noexport\n\n")
            :empty-lines-before 1
            :immediate-finish t
            :jump-to-captured t
@@ -412,17 +540,11 @@ Auto commit.
 
 #+begin_src emacs-lisp
 (after! org
-   (setq org-roam-capture-templates
-        `(("c" "📞 New Contact" plain (file ".new-contact.txt")
-           :target (file+head "contacts/%<%Y-%m-%dT%H-%M-%S>-${slug}.org"
-                              "#+TITLE: ${title}\n#+AUTHOR: %(print custom/nickname)\n#+DATE: %<%Y-%m-%dT%H:%M:%S>\n#+FILETAGS: contact\n#+CATEGORY: private\n#+EXPORT_EXCLUDE_TAGS: noexport\n\n")
-           :empty-lines-before 1
-           :immediate-finish t
-           :jump-to-captured t
-           :unnarrowed t)
-          ("k" "🌱 New Knowledge" plain "* %?"
-           :target (file+head "%<%Y-%m-%dT%H-%M-%S>-${slug}.org"
-                              "#+TITLE: ${title}\n#+AUTHOR: %(print custom/nickname)\n#+DATE: %<%Y-%m-%dT%H:%M:%S>\n#+FILETAGS: inbox\n#+CATEGORY: private\n\n")
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" plain
+           "%?"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+TITLE:  %<%Y-%m-%d>\n#+AUTHOR: %(print custom/nickname)\n#+EMAIL: %(print user-mail-address)\n#+DATE: %<%Y-%m-%dT%H:%M:%S>\n#+LANGUAGE: en\n#+FILETAGS: en inbox\n#+CATEGORY: private\n#+EXPORT_EXCLUDE_TAGS: noexport\n\n")
            :empty-lines-before 1
            :immediate-finish t
            :jump-to-captured t
@@ -870,24 +992,29 @@ MathJax = {
 (use-package! doct
   :ensure t
   :after org
-  :commands (doct)
-  :config
+  :commands (doct))
+#+end_src
+
+#+begin_src emacs-lisp
+(after! org
   (setq org-capture-templates
         (doct '(("📂 Project" :keys "p"
                  :type plain
                  :file (lambda () (concat "/tmp/" (read-string "Directory Name: ") "/README.org"))
                  :prepend t
-                 :template ("#+TITLE: %{title}\n#+AUTHOR: %{author}\n#+DATE: %{date}\n#+FILETAGS: %{filetags}\n#+CATEGORY: %{category}\n\n %?")
-                 :children (("Standard"  :keys "1"
+                 :template ("#+TITLE: %{title}\n#+AUTHOR: %{author}\n#+EMAIL: %{email}\n#+DATE: %{date}\n#+LANGUAGE: %{language}\n#+FILETAGS: %{filetags}\n#+CATEGORY: %{category}\n\n %?")
+                 :children (("Default | EN"  :keys "1"
                              :title "%^{title}"
                              :author "%(print custom/nickname)"
+                             :email "%(print user-mail-address)"
                              :date  "%<%Y-%m-%dT%H:%M:%S>"
-                             :filetags "inbox"
+                             :language "en"
+                             :filetags "en inbox"
                              :category "private"
-                             :hook (lambda () (message "Standard child selected.")
-                                     (org-id-get-create)))))))))
+                             :hook (lambda () (message "Default child selected.")
+                                     (org-id-get-create)
+                                     (setq ispell-local-dictionary "en")))))))))
 #+end_src
-
 *** Org refile
 
 #+begin_src emacs-lisp
